@@ -28,11 +28,15 @@
        {{ $value }},
        @endforeach
         </td> 
-        <td><img src="{{asset('storage/images/'.$profiles->image)}}"  width="55" height="30">
+        <td><img src="{{asset('storage/images/'.$profiles->image)}}"  alt="photo" width="55" height="55">
     </td>
         
-    <td><a href="{{ route('edit',$profiles->id) }}" class="btn btn-warning">Edit</a></td>
-    <td><a href="{{ route('delete',$profiles->id) }}" class="btn btn-info">Delete</a></td>
+    <td>
+        <a href="{{ route('edit',$profiles->id) }}" class="btn btn-warning">{{ __Edit }}</a>
+    </td>
+    <td>
+        <a href="{{ route('delete',$profiles->id) }}" class="btn btn-info">Delete</a>
+    </td>
     </tr>
     @endforeach
   

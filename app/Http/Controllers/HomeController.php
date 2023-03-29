@@ -25,15 +25,15 @@ class HomeController extends Controller
             'email' => 'required|email',
             'phone' =>'required|max:10',
             'qualification' =>'required',
-            'gender' => 'required',
-     
+            'gender' => 'required',          
+            'image'=> 'mimes:jpeg,jpg,png,gif|max:2048', 
         ]);
-    
+        
         $data = $request->all();
         $path = 'asset/storage/images/'.$data['image'];
         $fileName=time().$request->file('image')->getClientoriginalName();
         $path=$request->file('image')->storeAs('images',$fileName,'public');
-        $datas["image"]='/storage/'.$path;
+        $datas["image"]='/storage/'.$path;        
         $data['image']=$fileName; 
         $data['qualification'] = $request->input('qualification');
        
