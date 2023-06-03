@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
+
 class HomeController extends Controller
 {
     public function index()
@@ -43,7 +45,7 @@ class HomeController extends Controller
 }
     public function profile()
     {
-        $profile = Employee::all();    
+        $profile = Employee::all();
         return view('profile',compact('profile'));
     }
     public function edit($id)
@@ -56,6 +58,9 @@ class HomeController extends Controller
 
     public function update($id,Request $request)
     {       
+        $request->validate([
+            'image'=> 'mimes:jpeg,jpg,png,gif|max:2048',
+        ]);
        $data=Employee::find($id);
        $data->name = $request->input('name');
        $data->email = $request->input('email');
@@ -87,4 +92,15 @@ class HomeController extends Controller
     {
         return view('leave');
     }
+    public function search(Request $request)
+    {
+        $phoneNumber = $request->input('phone');
+    
+        $patient = Employee::where('phone', $phoneNumber)->first();
+    
+        return response()->json($patient);
+    }
+
+
+
 }

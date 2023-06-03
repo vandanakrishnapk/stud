@@ -55,6 +55,7 @@
           <li><a class="nav-link scrollto active" href="{{ route('profile') }}">profile</a></li>
           <li><a class="nav-link scrollto active" href="{{ route('leave') }}">leave</a></li>
           <li><a class="getstarted scrollto" href="#">Login</a></li>
+          @yield('search')
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -100,6 +101,69 @@
   <script src="{{ asset('assets/js/main.js') }}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha256-OFRAJNoaD8L3Br5lglV7VyLRf0itmoBzWUoM+Sji4/8=" crossorigin="anonymous"></script>
 
+  To search patient data from a table using a phone number in Laravel with AJAX and jQuery, you'll need to follow a few steps. I'll outline the general process for you:
+
+Set up the route:
+In your web.php file, define a route that will handle the AJAX request. For example:
+
+php
+Copy code
+Route::get('/search', 'PatientController@search')->name('search');
+Create the controller method:
+In your PatientController, create a method named search that will handle the search logic. This method will receive the AJAX request and return the search results. Here's an example implementation:
+
+php
+Copy code
+public function search(Request $request)
+{
+    $phoneNumber = $request->input('phone_number');
+
+    $patient = Patient::where('phone_number', $phoneNumber)->first();
+
+    return response()->json($patient);
+}
+Create the search form:
+In your HTML view, create a search form that includes an input field for the phone number and a button to trigger the search. Give each element an appropriate ID or class to target them with jQuery. For example:
+
+html
+Copy code
+<input type="text" id="phone_number_input">
+<button id="search_button">Search</button>
+<div id="search_results"></div>
+Write the JavaScript code:
+Include jQuery in your HTML file and write the JavaScript code to handle the AJAX request and update the search results dynamically. Here's an example using jQuery's $.ajax() method:
+
+javascript
+Copy code
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#search_button').click(function() {
+            var phoneNumber = $('#phone').val();
+
+            $.ajax({
+                url: '{{ route("search") }}',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    phone_number: phoneNumber
+                },
+                success: function(response) {
+                    // Update the search results in the DOM
+                    if (response) {
+                        var resultsHtml = '<p>Name: ' + response.name + '</p>';
+                        resultsHtml += '<p>Email: ' + response.email + '</p>';
+                        // Add more fields as needed
+
+                        $('#search_results').html(resultsHtml);
+                    } else {
+                        $('#search_results').html('No results found.');
+                    }
+                }
+            });
+        });
+    });
+</script>
 </body>
 
 </html>
